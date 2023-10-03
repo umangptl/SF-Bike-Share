@@ -1,10 +1,10 @@
 import pandas as pd
-import streamlit as st
 import pydeck as pdk
 import numpy as np
 import altair as alt
 from google.cloud import bigquery
 from google.oauth2 import service_account
+import streamlit as st
 
 credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gcp_service_account"]
