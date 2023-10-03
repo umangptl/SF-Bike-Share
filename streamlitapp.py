@@ -1,3 +1,4 @@
+!pip install google-cloud-bigquery
 
 import pandas as pd
 import streamlit as st
