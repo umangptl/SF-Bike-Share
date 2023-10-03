@@ -138,7 +138,7 @@ def data_comp():
 
 def visualize_start_station_trip_count():
     st.title('Top 15 Start Station Trip Count Visualization')
-    st.write("Select one or more start stations to visualize the number of trips.")
+    st.write("Select two or more start stations to visualize the number of trips.")
 
     # Get the top 15 start locations with the most trip counts
     top_start_locations = data['start_station_name'].value_counts().head(15).index.tolist()
