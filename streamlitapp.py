@@ -4,28 +4,26 @@ import streamlit as st
 import pydeck as pdk
 import numpy as np
 import altair as alt
-from google.oauth2 import service_account
 from google.cloud import bigquery
+from google.oauth2 import service_account
+
+credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"]
+    )
+
+client = bigquery.Client(credentials=credentials)
 
 # Load the Bay Area bike share data and cache it using st.cache_data
 #========================load data =========================
 @st.cache_data
 def load_data_from_bigquery():
-    # Create API client.
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
-    )
-    client = bigquery.Client(credentials=credentials)
-
     # Define your BigQuery SQL query
     query = f"""
     SELECT *
     FROM `BikeshareSF.cmpe255-400623`
     """
-
     # Execute the query and load the results into a DataFrame
     data = client.query(query).to_dataframe()
-
     return data
 
 # Create separate dataframes for different areas
