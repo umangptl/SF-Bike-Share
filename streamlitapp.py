@@ -1,23 +1,30 @@
 
-import os
 import pandas as pd
 import streamlit as st
 import pydeck as pdk
 import numpy as np
 import altair as alt
+from google.oauth2 import service_account
+from google.cloud import bigquery
 
 # Load the Bay Area bike share data and cache it using st.cache_data
 #========================load data =========================
 @st.cache_data
-def load_data():
-    path = "bikeshare_dataset.csv"
-    if not os.path.isfile(path):
-        path = f"https://github.com/umangptl/SF-Bike-Share/raw/main/{path}"
-    data = pd.read_csv(path)
+def load_data_from_bigquery():
+    # Create API client.
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"]
+    )
+    client = bigquery.Client(credentials=credentials)
 
-    # Convert date columns to datetime objects
-    data["start_date"] = pd.to_datetime(data["start_date"])
-    data["end_date"] = pd.to_datetime(data["end_date"])
+    # Define your BigQuery SQL query
+    query = f"""
+    SELECT *
+    FROM `BikeshareSF.cmpe255-400623`
+    """
+
+    # Execute the query and load the results into a DataFrame
+    data = client.query(query).to_dataframe()
 
     return data
 
@@ -176,10 +183,7 @@ def visualize_start_station_trip_count():
 #========================main run =========================
 
 # Load the data
-data = load_data()
-
-# Limit the data to the first 10%
-data = data.head(int(0.99 * len(data)))
+data = load_data_from_bigquery()
 
 # Create multi-page app
 pages = {
