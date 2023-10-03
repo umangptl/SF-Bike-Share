@@ -3,7 +3,6 @@ import os
 import pandas as pd
 import streamlit as st
 import pydeck as pdk
-import plotly.express as px
 import numpy as np
 import altair as alt
 
@@ -115,24 +114,24 @@ def Geo_visualization():
 #========================page 2 =========================
 def data_comp():
 
-  st.title("Compare trips over time")
+    st.title("Compare trips over time")
+  
+    # Create a dropdown to select the time frame
+    time_frame = st.selectbox("Select Time Frame", ["Per Date", "Per Month", "Per Week", "Per Day"])
 
-  # Create a dropdown to select the time frame
-  time_frame = st.selectbox("Select Time Frame", ["Per Date", "Per Month", "Per Week", "Per Day"])
+    # Data aggregation based on the selected time frame
+    if time_frame == "Per Date":
+        grouped_data = data.groupby(data["start_date"].dt.date).size().reset_index(name="Number of Rides")
+    elif time_frame == "Per Month":
+        grouped_data = data.groupby(data["start_date"].dt.strftime('%Y-%m')).size().reset_index(name="Number of Rides")
+    elif time_frame == "Per Week":
+        grouped_data = data.groupby(data["start_date"].dt.strftime('%U')).size().reset_index(name="Number of Rides")
+    else:
+        grouped_data = data.groupby(data["start_date"].dt.day).size().reset_index(name="Number of Rides")
 
-  # Data aggregation based on the selected time frame
-  if time_frame == "Per Date":
-    grouped_data = data.groupby(data["start_date"].dt.date).size().reset_index(name="Number of Rides")
-  elif time_frame == "Per Month":
-    grouped_data = data.groupby(data["start_date"].dt.strftime('%Y-%m')).size().reset_index(name="Number of Rides")
-  elif time_frame == "Per Week":
-    grouped_data = data.groupby(data["start_date"].dt.strftime('%U')).size().reset_index(name="Number of Rides")
-  else:
-    grouped_data = data.groupby(data["start_date"].dt.day).size().reset_index(name="Number of Rides")
+    # Create a bar chart using Streamlit's st.bar_chart
+    st.bar_chart(grouped_data.set_index(grouped_data.columns[0]))
 
-  # Create the histogram using Plotly Express
-  fig = px.bar(grouped_data, x=grouped_data.columns[0], y="Number of Rides", title=f"Number of Rides {time_frame}")
-  st.plotly_chart(fig)
 
 
 #========================page 3 =========================
