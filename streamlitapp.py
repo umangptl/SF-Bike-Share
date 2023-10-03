@@ -10,7 +10,7 @@ import altair as alt
 #========================load data =========================
 @st.cache_data
 def load_data():
-    path = "bikesharev1_dataset.csv"
+    path = "bikeshare_dataset.csv"
     if not os.path.isfile(path):
         path = f"https://github.com/umangptl/SF-Bike-Share/raw/main/{path}"
     data = pd.read_csv(path)
