@@ -2,10 +2,12 @@
 This Streamlit app provides visualizations and comparisons of Bay Area bike share data using Google BigQuery as the data source.
 - Streamlit - https://umangptl-cmpe-255-a1.streamlit.app/
 
-<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot.png">
-<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot3.png">
-<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot1.png">
-<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot2.png">
+<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/picture1.png">
+<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/picture2.png">
+<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/picture3.png">
+<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/picture4.png">
+<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/picture5.png">
+<img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/picture6.png">
 
 ## Features
 ### Geo Visualization
