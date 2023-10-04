@@ -9,6 +9,7 @@ import streamlit as st
 credentials = service_account.Credentials.from_service_account_info(
         st.secrets["gcp_service_account"]
     )
+# Create a BigQuery client
 client = bigquery.Client(credentials=credentials)
 
 # Load the Bay Area bike share data and cache it using st.cache_data
@@ -104,7 +105,7 @@ def Geo_visualization():
 
     # Oakland Area Map
     with maps_row[1]:
-        display_hexagon_map(oakland_data, "Oakland Area", oakland_data["start_station_latitude"], oakland_data["start_station_longitude"], hour_selected)
+        display_hexagon_map(oakland_data, "Oakland Area", oakland_data["start_station_latitude"] - 0.05, oakland_data["start_station_longitude"], hour_selected)
 
     # San Jose Area Map
     with maps_row[2]:
@@ -117,10 +118,10 @@ def Geo_visualization():
 #========================page 2 =========================
 def data_comp():
 
-    st.title("Compare trips over time")
+    st.title("Time vs Rides Analysis")
   
     # Create a dropdown to select the time frame
-    time_frame = st.selectbox("Select Time Frame", ["Per Date", "Per Month", "Per Week", "Per Day"])
+    time_frame = st.sidebar.selectbox("Select Time Frame", ["Per Date", "Per Month", "Per Week", "Per Day"])
 
     # Data aggregation based on the selected time frame
     if time_frame == "Per Date":
@@ -139,15 +140,14 @@ def data_comp():
 
 #========================page 3 =========================
 
-def visualize_start_station_trip_count():
-    st.title('Top 15 Start Station Trip Count Visualization')
-    st.write("Select two or more start stations to visualize the number of trips.")
+def visualize_start_station_ride_count():
+    st.title('Top 15 Start Station vs Rides Count Analysis')
 
-    # Get the top 15 start locations with the most trip counts
+    # Get the top 15 start locations with the most rides counts
     top_start_locations = data['start_station_name'].value_counts().head(15).index.tolist()
 
     # Sidebar to select start stations
-    selected_stations = st.multiselect('Select Start Stations', top_start_locations)
+    selected_stations = st.sidebar.multiselect('Select two or more Start Stations', top_start_locations)
 
     if selected_stations:
         # Filter data based on selected stations
@@ -173,7 +173,56 @@ def visualize_start_station_trip_count():
         # Display the chart
         st.altair_chart(chart, use_container_width=True)
     else:
-        st.info("Select one or more start stations to visualize the number of trips.")
+        st.info("Select two or more start stations to visualize the number of rides.")
+
+#========================page 4 =========================
+
+def Use_Profile_Comparison():
+    st.title("User Demographics Analysis")
+
+    # Predefined columns and their filter options
+    predefined_columns = {
+        "Subscriber Type": "subscriber_type",
+        "Member Birth Year": "member_birth_year",
+        "Member Gender": "member_gender"
+    }
+
+    # Get the column selection from the user
+    selected_column = st.sidebar.selectbox("Select Column", list(predefined_columns.keys()))
+
+    if selected_column:
+      selected_column_name = predefined_columns[selected_column]
+
+    # Provide filter options based on unique values in the selected column
+    filter_options = data[selected_column_name].unique()
+
+    if selected_column_name == "member_birth_year":
+        # For Member Birth Year column, display unique values in ascending order
+        filter_options = sorted(filter_options)
+
+    selected_filter = st.sidebar.selectbox(f"Select {selected_column}", filter_options)
+
+    # Filter the data based on the selected filter
+    if selected_filter:
+        filtered_data = data[data[selected_column_name] == selected_filter]
+        st.write(f"Filtered Data for {selected_column}: {selected_filter}")
+        st.write(filtered_data)
+
+    # Visualization
+    st.header("Data Visualization")
+
+    # Group data by start stations and count the trips
+    station_trip_counts = data['start_station_name'].value_counts().reset_index()
+    station_trip_counts.columns = ['start_station_name', 'trip_count']
+
+    # Create a bar chart
+    chart = alt.Chart(station_trip_counts).mark_bar().encode(
+        x='trip_count:Q',
+        y=alt.Y('start_station_name:N', sort='-x'),
+        tooltip=['start_station_name:N', 'trip_count:Q']
+    ).properties(width=600, height=400)
+
+    st.altair_chart(chart)
 
 
 #========================main run =========================
@@ -183,13 +232,14 @@ data = load_data_from_bigquery()
 
 # Create multi-page app
 pages = {
-    'Geo Visualization 🌎 ': Geo_visualization,
-    'Date Comparison 📊': data_comp,
-    'Start station Comparison 📈':visualize_start_station_trip_count,
+    'Geographical Analysis 🌎 ': Geo_visualization,
+    'Time Analysis 📊': data_comp,
+    'Start Station Analysis 📈': visualize_start_station_ride_count,
+    'User Demographics Comparison 🆚': Use_Profile_Comparison  
 }
 
 st.sidebar.title('DashBoard')
-page = st.sidebar.radio('Go to ->', list(pages.keys()))
+page = st.sidebar.radio('Go to page', list(pages.keys()))
 
 # Display the selected page
 pages[page]()
