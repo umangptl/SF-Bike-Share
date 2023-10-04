@@ -1,12 +1,11 @@
 # Bay Area Bike Share Data Visualization
 This Streamlit app provides visualizations and comparisons of Bay Area bike share data using Google BigQuery as the data source.
 - Streamlit - https://umangptl-cmpe-255-a1.streamlit.app/
-<p>
+
 <img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot.png">
 <img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot3.png">
 <img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot1.png">
 <img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot2.png">
-</p>
 
 ## Features
 ### Geo Visualization
