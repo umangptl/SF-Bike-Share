@@ -7,6 +7,7 @@ This Streamlit app provides visualizations and comparisons of Bay Area bike shar
 <img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot1.png">
 <img width="500" alt="screenshot" src="https://github.com/umangptl/SF-Bike-Share/blob/main/Screenshot2.png">
 </p>
+
 ## Features
 ### Geo Visualization
 - Visualize bike share data on interactive maps.
